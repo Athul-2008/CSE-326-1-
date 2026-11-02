@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f0">
+  <meta name="description" content="TripNest keeps trip plans, itinerary activities, and travel costs together.">
+  <title>TripNest | Travel Budget Planner</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="TripNest home">
+      <svg class="brand-icon" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+        <path d="M25 12 21.2 21.2 12 25l3.8-9.2L25 12Z" fill="currentColor"></path>
+      </svg>
+      <span>tripnest<small>PLAN LIGHT. TRAVEL FAR.</small></span>
+    </a>
+
+    <nav class="main-nav" id="mainNav" aria-label="Main navigation" hidden>
+      <button class="nav-link active" type="button" data-view="trips">My trips</button>
+      <button class="nav-link" type="button" data-view="places">Places</button>
+      <button class="nav-link" type="button" data-view="course">CSE326 guide</button>
+    </nav>
+
+    <div class="account-bar" id="accountBar" hidden>
+      <span class="signed-in-label" id="signedInLabel"></span>
+      <button class="button button-light button-small" id="signOutButton" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="login-layout" id="loginPanel" aria-labelledby="welcomeTitle">
+      <div class="intro-copy">
+        <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true">✳</span> A LITTLE SPACE FOR BIG PLANS</p>
+        <h1 id="welcomeTitle">Your next story<br>starts with a <em>plan.</em></h1>
+        <p class="intro-text">Keep the places, little details, and travel costs together—so you can spend less time juggling tabs and more time looking forward to the trip.</p>
+        <div class="intro-note"><span class="note-icon" aria-hidden="true">↗</span><span><strong>One trip at a time.</strong><br>Simple planning for the places you can't wait to see.</span></div>
+      </div>
+
+      <section class="login-card" aria-labelledby="accountTitle">
+        <p class="eyebrow">YOUR TRAVEL DESK</p>
+        <h2 id="accountTitle">Good to see you</h2>
+        <p class="muted-text" id="accountHelp">Sign in to open your saved plans in this browser.</p>
+        <div class="form-tabs" role="group" aria-label="Choose account action">
+          <button class="tab-button selected" type="button" data-account-mode="login" aria-pressed="true">Sign in</button>
+          <button class="tab-button" type="button" data-account-mode="register" aria-pressed="false">Create profile</button>
+        </div>
+        <form id="accountForm">
+          <div class="field-group" id="nameField" hidden>
+            <label for="accountName">Your name</label>
+            <input id="accountName" name="name" type="text" maxlength="50" autocomplete="name" placeholder="e.g. Alex">
+          </div>
+          <div class="field-group">
+            <label for="accountEmail">Email address</label>
+            <input id="accountEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+          </div>
+          <button class="button button-primary button-wide" id="accountSubmit" type="submit">Sign in</button>
+          <p class="form-message" id="accountMessage" aria-live="polite"></p>
+        </form>
+        <p class="demo-warning"><strong>Class demo only:</strong> this is an email-only profile saved in this browser. There is no password or secure online account. Don't enter private information.</p>
+      </section>
+    </section>
+
+    <section class="workspace" id="workspace" hidden>
+      <section class="page-view" id="tripsView" aria-labelledby="pageTitle">
+        <div class="hero-panel">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true">✳</span> YOUR TRAVEL, ALL IN ONE PLACE</p>
+            <h1 id="pageTitle">Make room for<br>the <em>good parts.</em></h1>
+            <p>Plan the details now. Look forward to the moments later.</p>
+            <button class="button button-primary" id="showTripForm" type="button"><span aria-hidden="true">＋</span> Plan a trip</button>
+          </div>
+          <aside class="next-trip" aria-live="polite">
+            <p class="eyebrow">NEXT UP <span aria-hidden="true">✳</span></p>
+            <div id="nextTrip"><p class="next-trip-empty">The next one is waiting to be planned.</p></div>
+          </aside>
+        </div>
+
+        <section class="summary-row" aria-label="Travel planning counts">
+          <article class="summary-card"><span class="summary-icon green-icon" aria-hidden="true">↗</span><div><strong id="tripCount">0</strong><span>trips planned</span></div></article>
+          <article class="summary-card"><span class="summary-icon peach-icon" aria-hidden="true">⌖</span><div><strong id="placeCount">0</strong><span>places collected</span></div></article>
+          <article class="summary-card"><span class="summary-icon yellow-icon" aria-hidden="true">☆</span><div><strong id="favoriteCount">0</strong><span>trips saved</span></div></article>
+        </section>
+
+        <details class="form-panel" id="tripFormPanel">
+          <summary id="tripFormSummary">＋ Plan a new trip</summary>
+          <form class="trip-form" id="tripForm">
+            <input id="tripId" name="tripId" type="hidden">
+            <div class="field-group"><label for="tripTitle">Trip name</label><input id="tripTitle" name="title" type="text" maxlength="70" placeholder="e.g. A week in Kyoto" required></div>
+            <div class="field-group"><label for="tripDestination">Destination</label><input id="tripDestination" name="destination" type="text" list="savedPlaces" maxlength="70" placeholder="Choose or type a place" required></div>
+            <div class="field-group"><label for="tripStart">Start date</label><input id="tripStart" name="startDate" type="date" required></div>
+            <div class="field-group"><label for="tripEnd">End date</label><input id="tripEnd" name="endDate" type="date" required></div>
+            <div class="field-group"><label for="tripBudget">Budget limit</label><input id="tripBudget" name="budget" type="number" min="0" step="0.01" placeholder="0.00"></div>
+            <div class="field-group"><label for="tripCurrency">Currency</label><select id="tripCurrency" name="currency"><option value="INR">INR ₹</option><option value="USD">USD $</option><option value="EUR">EUR €</option><option value="GBP">GBP £</option><option value="JPY">JPY ¥</option></select><small class="field-hint">Changing this does not convert existing costs.</small></div>
+            <div class="field-group field-wide"><label for="tripNotes">Trip notes</label><textarea id="tripNotes" name="notes" rows="3" maxlength="400" placeholder="A few things to remember…"></textarea></div>
+            <div class="form-buttons field-wide"><button class="button button-light" id="cancelTripEdit" type="button" hidden>Cancel</button><button class="button button-primary" id="saveTripButton" type="submit">Save trip</button></div>
+          </form>
+        </details>
+
+        <section class="trip-section" aria-labelledby="tripListTitle">
+          <div class="section-heading"><div><p class="eyebrow">YOUR LITTLE ESCAPES</p><h2 id="tripListTitle">My trips <span class="count-pill" id="visibleTripCount">0</span></h2></div></div>
+          <div class="trip-toolbar">
+            <label class="search-box"><span aria-hidden="true">⌕</span><span class="screen-reader-only">Search trips</span><input id="tripSearch" type="search" placeholder="Search trips and places…"></label>
+            <label class="filter-label" for="tripFilter">Show</label>
+            <select id="tripFilter"><option value="all">All trips</option><option value="upcoming">Upcoming</option><option value="past">Past trips</option><option value="favorites">Saved trips</option></select>
+          </div>
+          <div class="trip-list" id="tripList"></div>
+          <div class="empty-state" id="emptyTrips" hidden><span class="empty-mark" aria-hidden="true">✳</span><h3 id="emptyTripTitle">Your first trip starts here</h3><p id="emptyTripText">Add a destination, set a budget, and keep the details in one place.</p><button class="button button-primary" id="emptyTripButton" type="button">Plan your first trip</button></div>
+        </section>
+      </section>
+
+      <section class="page-view places-view" id="placesView" aria-labelledby="placesTitle" hidden>
+        <div class="page-heading"><div><p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true">⌖</span> PLACES TO GO</p><h1 id="placesTitle">Your place<br><em>collection.</em></h1><p>Keep a little list of places you want to visit. Trip destinations are added here too.</p></div><span class="wish-stamp" aria-hidden="true">THE<br>WISH<br>LIST ✳</span></div>
+        <div class="places-layout">
+          <form class="form-panel place-form" id="placeForm">
+            <p class="eyebrow" id="placeFormTitle">ADD A PLACE</p>
+            <input id="placeId" name="placeId" type="hidden">
+            <div class="field-group"><label for="placeName">Place name</label><input id="placeName" name="name" type="text" maxlength="70" placeholder="e.g. Kyoto" required></div>
+            <div class="field-group"><label for="placeRegion">Country or region</label><input id="placeRegion" name="region" type="text" maxlength="70" placeholder="e.g. Japan"></div>
+            <div class="field-group"><label for="placeNote">Why it's on your list</label><textarea id="placeNote" name="note" rows="3" maxlength="200" placeholder="A short note to remember…"></textarea></div>
+            <div class="form-buttons"><button class="button button-primary" id="savePlaceButton" type="submit">Save place</button><button class="button button-light" id="cancelPlaceEdit" type="button" hidden>Cancel</button></div>
+          </form>
+          <section class="place-results" aria-labelledby="placeListTitle"><div class="section-heading"><div><p class="eyebrow">YOUR COLLECTION</p><h2 id="placeListTitle">On the map <span class="count-pill" id="placesTotal">0</span></h2></div></div><div class="place-list" id="placeList"></div><div class="empty-state" id="emptyPlaces" hidden><span class="empty-mark" aria-hidden="true">⌖</span><h3>No places just yet</h3><p>Start with somewhere you've always wanted to see.</p></div></section>
+        </div>
+      </section>
+
+      <section class="page-view course-view" id="courseView" aria-labelledby="courseTitle" hidden>
+        <div class="page-heading course-heading"><div><p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true">✦</span> BUILT WITH CSE326 TOPICS</p><h1 id="courseTitle">The code behind<br>the <em>journey.</em></h1><p>This version uses the Internet Programming syllabus concepts in a small, real website. Open the three source files to see each idea in practice.</p></div></div>
+        <div class="course-table-wrap">
+          <table class="course-table">
+            <caption>CSE326 topics used in TripNest</caption>
+            <thead><tr><th scope="col">Syllabus unit</th><th scope="col">Course concept</th><th scope="col">Where to see it</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">I–II · HTML</th><td>HTML5 structure, semantic sections, labels, forms, input types, accessible controls</td><td><code>index.html</code> — header, nav, main, sections, forms and labels</td></tr>
+              <tr><th scope="row">III · CSS</th><td>CSS variables, box model, selectors, Flexbox, Grid, focus styles, media queries and transitions</td><td><code>style.css</code> — <code>:root</code>, layout, focus and responsive rules</td></tr>
+              <tr><th scope="row">IV · JavaScript</th><td>Variables, constants, strings, numbers, conditions, functions, arrays and objects</td><td><code>script.js</code> — trip data, calculations and named functions</td></tr>
+              <tr><th scope="row">V · Interactive web</th><td>Loops/array methods, DOM updates, events, form validation, regular expressions, dates, JSON and Web Storage</td><td><code>script.js</code> — forms, search, itinerary and localStorage</td></tr>
+              <tr><th scope="row">VI · Development</th><td>Organized files, debugging, browser testing and GitHub Pages deployment</td><td><code>README.md</code> — project map and beginner publishing steps</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="course-note"><strong>Why no Java?</strong> CSE326 here teaches browser <em>JavaScript</em> for interactive websites. Java and JavaScript are different languages; this static website uses JavaScript because that is what the syllabus covers for client-side programming.</aside>
+        <aside class="course-note demo-course-note"><strong>Keep it honest:</strong> the email-only profile and trip records are stored in this browser with <code>localStorage</code>. There is no server, shared database, or secure user authentication.</aside>
+      </section>
+    </section>
+  </main>
+
+  <datalist id="savedPlaces"></datalist>
+  <footer class="site-footer" id="siteFooter" hidden><span>TripNest <b aria-hidden="true">✳</b></span><span>A student-built CSE326 practice project · Browser demo only</span></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
